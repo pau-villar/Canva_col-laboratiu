@@ -27,23 +27,47 @@ loginForm.addEventListener('submit', (e) => {
   loginSection.hidden = true;
   canvas.hidden = false;
 
-  /*/
-  
-  function ejemplo2(){
-    var c = document.getElementById("myCanvas");
-    var ctx = c.getContext("2d");
-    ctx.beginPath();
-    ctx.arc(95, 50, 40, 0, 2 * Math.PI);
-    ctx.stroke();
-    
-    var pre = document.getElementById("code").innerText= "\
-        var c = document.getElementById(\"myCanvas\");\n\
-        var ctx = c.getContext(\"2d\");\n\
-        ctx.beginPath();\n\
-        ctx.arc(95, 50, 40, 0, 2 * Math.PI);\n\
-        ctx.stroke();\n\
-    ";
-}
-/*/
+  socket.emit('user:join', myName);
+  resizeCanvas();
 
 });
+
+const ctx = canvas.getContext('2d');
+let users = {};
+
+
+// Enviar mi posición
+canvas.addEventListener('mousemove', (e) => {
+  socket.emit('cursor:move', { x: e.clientX, y: e.clientY });
+});
+
+// Recibir las posiciones de todos
+socket.on('cursors:update', (data) => {
+  users = data;
+  draw();
+});
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (const id in users) {
+    const u = users[id];
+
+    // Cursor: círculo
+    ctx.fillStyle = 'red';
+    ctx.beginPath();
+    ctx.arc(u.x, u.y, 8, 0, Math.PI * 2);
+    ctx.fill();
+
+    /*/
+    // Cuadrado con el nombre
+    ctx.font = '14px Arial';
+    const w = ctx.measureText(u.name).width + 12;
+    ctx.fillStyle = '#1d4ed8';
+    ctx.fillRect(u.x + 12, u.y + 12, w, 24);
+
+    ctx.fillStyle = 'white';
+    ctx.fillText(u.name, u.x + 18, u.y + 29);
+    /*/
+  }
+}
