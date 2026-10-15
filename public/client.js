@@ -8,6 +8,14 @@ const canvas = document.getElementById('canvas');
 
 let myName = '';
 
+// Tamaño del canvas 
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  draw(); // repinta tras redimensionar 
+}
+window.addEventListener('resize', resizeCanvas);
+
 loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -54,20 +62,18 @@ function draw() {
     const u = users[id];
 
     // Cursor: círculo
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = 'black';
     ctx.beginPath();
-    ctx.arc(u.x, u.y, 8, 0, Math.PI * 2);
+    ctx.arc(u.x, u.y, 6, 0, Math.PI * 2);
     ctx.fill();
 
-    /*/
     // Cuadrado con el nombre
     ctx.font = '14px Arial';
     const w = ctx.measureText(u.name).width + 12;
-    ctx.fillStyle = '#1d4ed8';
+    ctx.fillStyle = u.color;
     ctx.fillRect(u.x + 12, u.y + 12, w, 24);
 
     ctx.fillStyle = 'white';
     ctx.fillText(u.name, u.x + 18, u.y + 29);
-    /*/
   }
 }

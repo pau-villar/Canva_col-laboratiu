@@ -12,6 +12,11 @@ app.use(express.static('public'));
 
 const users = {}; // { socket.id: { name, x, y } }
 
+function randomColor() {
+  const hue = Math.floor(Math.random() * 360);
+  return `hsl(${hue}, 70%, 45%)`;
+}
+
 io.on('connection', (socket) => {
   console.log('Cliente conectado:', socket.id);
 
@@ -20,7 +25,7 @@ io.on('connection', (socket) => {
     name = name.trim();
     if (name.length === 0 || name.length > 20) return;
 
-    users[socket.id] = { name, x: 0, y: 0 };
+    users[socket.id] = { name, x: 0, y: 0, color: randomColor() };
   });
 
   socket.on('cursor:move', (pos) => {
