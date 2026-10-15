@@ -1,16 +1,18 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
-
+const path = require('path')
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
 const port = 3006;
 
+//app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, '../../..', 'public_html/Canva_col·laboratiu')));
 app.use(express.static('public'));
 
-const users = {}; // { socket.id: { name, x, y } }
+const users = {}; // { socket.id: { name, x, y, color } }
 
 function randomColor() {
   const hue = Math.floor(Math.random() * 360);
